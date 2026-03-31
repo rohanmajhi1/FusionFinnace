@@ -3,21 +3,21 @@ SELECT
     aia.invoice_num,
     aia.invoice_date,
     aia.invoice_amount,
-    aps.vendor_name,
+
+    pss.vendor_site_code,
     aca.check_number,
     aca.check_date
 FROM
     ap_invoices_all aia
 JOIN
-    ap_suppliers aps
-    ON aia.vendor_id = aps.vendor_id
+    poz_suppliers ps
+    ON aia.vendor_id = ps.vendor_id
+LEFT JOIN
+    poz_supplier_sites_all_m pss
+    ON aia.vendor_site_id = pss.vendor_site_id
 LEFT JOIN
     ap_invoice_payments_all aipa
     ON aia.invoice_id = aipa.invoice_id
 LEFT JOIN
     ap_checks_all aca
     ON aipa.check_id = aca.check_id
-WHERE
-    aia.invoice_date BETWEEN :p_from_date AND :p_to_date
-ORDER BY
-    aia.invoice_date;
